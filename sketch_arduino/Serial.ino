@@ -10,9 +10,17 @@
           delay(2);
         }
         //调试打印输出
-        Serial.println("receive from Serial: "+debugData);
+        printLog(DEBUG_MODE,"receive from Serial:"+debugData);
+
+        //reply[true]("111");
       }
       debugData.trim();
       
     return debugData;
   }
+
+  void replySerial(String str){
+    printLog(DEBUG_MODE,"reply serial" + str);
+  }
+  
+

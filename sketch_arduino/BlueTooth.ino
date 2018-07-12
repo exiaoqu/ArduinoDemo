@@ -17,15 +17,30 @@
           }
           //调试打印输出
           phoneData.trim();
-          Serial.println("receive via BlueTooth:"+phoneData);
-          return phoneData;
+          printLog(DEBUG_MODE,"receive via BlueTooth:"+phoneData);
+          
+          return phoneData + " " + ON;
         }
         return phoneData;
   }
+
+//void initCmd(String data){
+//  int len = sizeof(cmdArray)/sizeof(cmdStruct);
+//  String cmdType = data.substring(0,COMMAND_HEADER_LENGTH);
+//  if(cmd.startsWith(DISTANCE)){
+//    memcpy(cmdArray[len].cmd,DISTANCE);
+//    cmdArray[len].pfun = &getDistance;
+//    
+//  }
+  
+  
+          
+//}
+  
   //发送字符
   void replyBlueTooth(String data){
 		//调试打印输出
-        Serial.println("reply BlueTooth:"+data);
+        printLog(DEBUG_MODE,"reply BlueTooth:"+data);
         //蓝牙模块发送数据
         SerialBlueTooth.println(data);
     }
