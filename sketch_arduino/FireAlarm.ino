@@ -43,8 +43,6 @@ void fireDectect(unsigned long curTime){
 
       lastTime = curTime;
       }
-  
-    
     }
   }
 
