@@ -1,5 +1,5 @@
 //延时间隔决定采样的频率，根据实际需要变换参数
-#define  DELAY_TIME    50
+#define  DELAY_TIME    500
 
 
 unsigned long gLastTime = 0L;
@@ -48,6 +48,7 @@ void getDistance(unsigned long curTime) {
    float dis = ranging();
   while (MAX_RANGING_DISTANCE < dis) {
     printLog(DEBUG_MODE,"Distance abnormal :" + String(dis));
+    delay(100);
     gLastTime = 0;
   }
   String dist = String(dis);

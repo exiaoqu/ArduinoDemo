@@ -9,8 +9,8 @@
 #define BULE_TOOTH_PIN_TX  7
 #define BULE_TOOTH_PIN_RX  8
 
-#define ULTR_SOUND_ECHO_PIN  9
-#define ULTR_SOUND_TRIG_PIN  10
+#define ULTR_SOUND_ECHO_PIN  2
+#define ULTR_SOUND_TRIG_PIN  3
 
 
 #define REPLY_METHOD_LENGTH  2
@@ -40,6 +40,7 @@ void replyBlueTooth(String);
 void replySerial(String);
 void fireDectect(unsigned long curTime);
 void setupHumidty();  
+void steeringPlay();
 
 void setupUltrSound();
 String receiveCmdViaSerial();
@@ -55,6 +56,9 @@ int DEBUG_MODE = 0 ;
 int DEBUG_MODE_DETAIL = 1 ;
 int DEBUG_MODE_DISTANCE_CONTINUOUS = 0 ;
 int LOG_LEVEL = DEBUG_MODE;
+
+// 0 1,2 3
+int gDURATION_TIME = 1000;
 //超声波模块引脚定义
 //const int trig = ULTR_SOUND_TRIG;    // 触发信号
 //const int  = ULTR_SOUND_ECHO_PIN;    // 反馈信号
@@ -62,10 +66,13 @@ int LOG_LEVEL = DEBUG_MODE;
 String ON = "on";
 
 //命令前缀
-String DISTANCE = "DI";
-String FIREALARM = "FI"; //温度
-String HUMIDTY = "HU";   //湿度S
-String TEMPERATURE = "TE";   //湿度S
+String DISTANCE = "DI";   //距离
+String FIREALARM = "FI"; //火焰
+String HUMIDTY = "HU";   //湿度
+String TEMPERATURE = "TE";   //温度
+String STEERING = "ST"; //舵机
+String LOG = "LO"; // 日志等级
+String LIGHT = "LI";
 
 //串口调试命令
 String STOP = "STOP";   //停止
@@ -107,6 +114,9 @@ void setup() {
   setupFireAlarm();
   setupSteering();
   setupHumidty();
+  //setupLED();
+ 
+  //blinkLED();
 }
 
 void loop() {
@@ -129,7 +139,9 @@ void loop() {
 
    //Rooting
     rooting();
+    
     //经测试，间隔100ms
+     
 
   }
 }
@@ -138,37 +150,53 @@ void loop() {
 // handle Msg  begin
 //###############################################################
 void handleMsgViaBlueTooth(String cmd) {
-  handleMsg(false, cmd);
+ ////////////////////
+    int endIndex = 0;
+    String waitingCmd = cmd;
+    while(endIndex < waitingCmd.length()){
+        endIndex = waitingCmd.indexOf("#");
+        String silptCmd = waitingCmd.substring(0,endIndex);
+        handleMsg(false, silptCmd+" "+ON);
+        waitingCmd = waitingCmd.substring(endIndex+1);
+        //printLog(DEBUG_MODE,"endIndex:"+String(endIndex)+" waitingCmd.length()-1:"+String(waitingCmd.length()-1));
+      }
+  /////////////////////////
+  //handleMsg(false, cmd);
 }
 
-void handleMsgViaSerial(String cmd) {  
+void handleMsgViaSerial(String cmd) {
   handleMsg(true, cmd);
 }
 
 void handleMsg(bool isSerial, String cmd) {
+  
   String header = cmd.substring(0, COMMAND_HEADER_LENGTH);
   header.toUpperCase();
-  if (header.startsWith("DI")) {
+  if (header.startsWith(DISTANCE)) {
     printLog(DEBUG_MODE_DETAIL, "cmd is: " + cmd);
     handleDistanceInDebug(isSerial,cmd);
   }
-  if (header.startsWith("LO")) {
+  if (header.startsWith(LOG)) {
     printLog(DEBUG_MODE, "cmd is: " + cmd);
     handleLogLevel(cmd);
   }
-  if (header.startsWith("ST")) {
+  if (header.startsWith(STEERING)) {
     printLog(DEBUG_MODE, "cmd is: " + cmd);
     steeringPlay();
   }
-  if (header.startsWith("HU")) {
+  if (header.startsWith(HUMIDTY)) {
     printLog(DEBUG_MODE, "cmd is: " + cmd);
     humidity(isSerial);
   }
-
-   if (header.startsWith("TE")) {
+   if (header.startsWith(TEMPERATURE)) {
     printLog(DEBUG_MODE, "cmd is: " + cmd);
     temperature(isSerial);
   }
+  if (header.startsWith("L3")){
+    printLog(DEBUG_MODE, "cmd is: " + cmd);
+    redTrigController(millis());
+  }
+
   printLog(DEBUG_MODE, "just test cmd is: " + cmd);
 }
 
@@ -220,9 +248,11 @@ void rooting() {
   unsigned long curTime = millis();
   //fireDectect(curTime);
   //distance
-  cmdArray[0].pfun(curTime);
+  //cmdArray[0].pfun(curTime);
   cmdArray[1].pfun(curTime);
   cmdArray[2].pfun(curTime);
+  ledExcuter();
+  //blinkLED(curTime,gDURATION_TIME);
 }
 
 

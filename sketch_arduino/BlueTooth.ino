@@ -18,8 +18,7 @@
           //调试打印输出
           phoneData.trim();
           printLog(DEBUG_MODE,"receive via BlueTooth:"+phoneData);
-          
-          return phoneData + " " + ON;
+          return phoneData;
         }
         return phoneData;
   }
@@ -32,9 +31,6 @@
 //    cmdArray[len].pfun = &getDistance;
 //    
 //  }
-  
-  
-          
 //}
   
   //发送字符

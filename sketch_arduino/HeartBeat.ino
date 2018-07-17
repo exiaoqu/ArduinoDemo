@@ -5,9 +5,6 @@ int HEART_BEAT_DELAY = 10000;
 void heartBeat(unsigned long curTime) {
   if((curTime - gLastHeartBeatTime )>  HEART_BEAT_DELAY){
       reply[BULE_TOOTH_MODE]("hb");
-      
-      //reply[1]("hb");
       gLastHeartBeatTime = curTime;
   }
-  
 }

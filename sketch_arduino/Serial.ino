@@ -9,13 +9,13 @@
           debugData += char(Serial.read());
           delay(2);
         }
+        
         //调试打印输出
         printLog(DEBUG_MODE,"receive from Serial:"+debugData);
 
-        //reply[true]("111");
       }
       debugData.trim();
-      
+
     return debugData;
   }
 
