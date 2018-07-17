@@ -5,6 +5,8 @@
 #define BREATH_Ligth_DELAY  3000
 #define BREATH_Ligth_BRIGHT 50
 
+#define RED_DURATION_TIME  2000
+#define BLUE_DURATION_TIME  500
 
 //RGB灯点亮模式：0,绿灯亮 1,红灯闪 2,蓝灯亮
 
@@ -17,9 +19,6 @@ unsigned long gLastBlueLightTime = 0L;
 unsigned long gLastRedTrigTime = 0L;
 unsigned long gLastBlueTrigTime = 0L;
 
-int RED_DURATION_TIME = 3000;
-
-int BLUE_DURATION_TIME = 500;
 
 //初始化
 void setupRGB() {

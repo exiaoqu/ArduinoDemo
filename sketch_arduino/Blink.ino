@@ -1,14 +1,14 @@
-int RED_BLINK_TIME = 100;
+#define RED_BLINK_TIME  75
 
 
 unsigned long gLastRedBlinkTime = 0L;
 
-unsigned long count = 0L;
+unsigned long gCount = 0L;
 
 void blinkRed(){
 
       if((millis() - gLastRedBlinkTime )>  RED_BLINK_TIME){
-        switch(count%2){
+        switch(gCount%2){
           case 0:
             //printLog(DEBUG_MODE,"lightenRed :"+count);
             lightenRed();
@@ -18,6 +18,6 @@ void blinkRed(){
             break;
         }
         gLastRedBlinkTime = millis();
-        count ++;
+        gCount ++;
       }
   }
